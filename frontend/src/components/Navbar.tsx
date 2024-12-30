@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
-import React, { useContext } from "react";
+import React, { useRef, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 export const Navbar = () => {
   const { userId, logout } = useContext(AuthContext);
+  const dropdownMenuRef = useRef(null);
+
+  const location = useLocation();
+
+  // TODO - make the dropdown disappear when clicking one of the links in the dropdown
+  // https://medium.com/@malikhamzav/how-to-close-daisyui-dropdown-on-click-ea65c5749410
+
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">

@@ -9,11 +9,20 @@ import { createContext, PropsWithChildren, useState, useEffect } from "react";
 import { auth } from "../config/firebase";
 import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../config/axios";
+import { findUser } from "../config/user-service";
 
+type UserData = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  engineering_discipline: string;
+  field_of_interest: string[];
+};
 // Context
 export const AuthContext = createContext<{
   userId: null | string;
   email: null | string;
+  userData: UserData | null;
   setUserId: (userId: null | string) => void;
   signIn: (email: string, password: string) => void;
   signUp: (email: string, password: string) => void;
@@ -24,6 +33,7 @@ export const AuthContext = createContext<{
 }>({
   userId: null,
   email: null,
+  userData: null,
   signUpError: null,
   signInError: null,
   setUserId: () => console.log("Function not defined"),
@@ -38,6 +48,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   const [signUpError, setSignUpError] = useState<string | null>(null);
   const [signInError, setSignInError] = useState<string | null>(null);
@@ -56,8 +67,15 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         password
       );
       setUser(credentials);
+      // const userData = await findUser(credentials.user.uid);
+      // setUserData({
+      //   first_name: userData.first_name,
+      //   last_name: userData.last_name,
+      //   email: userData.email,
+      //   engineering_discipline
+      // });
     } catch (error: any) {
-      setSignInError(error.message);
+      setSignInError(error.code);
       logout();
     } finally {
       setLoading(false);
@@ -89,8 +107,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         });
       }
     } catch (error: any) {
-      console.log("🚀 ~ signUp ~ error:", error);
-      setSignUpError(error.message);
+      setSignUpError(error.code);
       logout();
     } finally {
       setLoading(false);
@@ -112,6 +129,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setUserId(null);
     setEmail(null);
     setLoading(false);
+    setUserData(null);
   };
 
   // useEffect(() => {
@@ -138,6 +156,15 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
         setUserId(user.uid);
         const token = await user.getIdToken();
         setToken(token);
+        const userData = await findUser(user.uid);
+        console.log("🚀 ~ onAuthStateChanged ~ userData:", userData);
+        setUserData({
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          email: userData.email,
+          engineering_discipline: userData.engineering_discipline,
+          field_of_interest: userData.field_of_interest,
+        });
       } else {
         logout();
       }
@@ -150,6 +177,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       value={{
         email,
         userId,
+        userData,
         setUserId,
         signIn,
         signUp,

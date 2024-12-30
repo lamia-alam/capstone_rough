@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, Navigate } from "react-router-dom";
+import { firebaseErrorToMessage } from "../config/user-service";
 
 const allDisciplines = [
   "SOFTWARE",
@@ -160,7 +161,7 @@ export const SignUp = () => {
       </button>
       {signUpError && (
         <div className="p-3 text-red-600">
-          <p>Oops. Something went wrong. Please try again.</p>
+          <p>{firebaseErrorToMessage(signUpError)}</p>
         </div>
       )}
       <p>

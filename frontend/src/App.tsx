@@ -27,7 +27,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="flex flex-col h-screen">
       <Navbar />
       <Routes>
         <Route path="/about" element={<About />} />
@@ -40,7 +40,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
-    </>
+    </div>
   );
 }
 
