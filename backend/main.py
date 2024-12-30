@@ -55,6 +55,7 @@ def create_user(user: User, db: Session = Depends(get_db)):
         engineering_discipline=user.engineering_discipline,
     )
     db.add(db_user)
+    db.commit()
 
     for interest in user.field_of_interest:
         db_interest = FieldOfInterest(name=interest, user_id=db_user.id)
