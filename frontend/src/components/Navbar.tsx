@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import React, { useRef, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { FileContext } from "../context/FileContext";
 import { useLocation } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const Navbar = () => {
   const { userId, logout } = useContext(AuthContext);
+  const { profileImageUrl } = useContext(FileContext);
   const dropdownMenuRef = useRef(null);
 
   const location = useLocation();
@@ -41,7 +44,7 @@ export const Navbar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={profileImageUrl}
                 />
               </div>
             </div>

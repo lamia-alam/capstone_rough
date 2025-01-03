@@ -1,15 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
+import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext.tsx";
+import { FileProvider } from "./context/FileContext";
+import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <FileProvider>
+          <App />
+        </FileProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>
