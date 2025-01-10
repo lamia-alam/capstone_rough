@@ -12,7 +12,9 @@ export const Landing = () => {
         <h2 className="text-9xl">ASPIRE</h2>
       </div>
       {userId ? (
-        <button className="btn btn-primary">Start session</button>
+        <Link to="/session" className="btn btn-primary">
+          Start session
+        </Link>
       ) : (
         <>
           <h5 className="text-4xl">AI-Powered Interview Coach</h5>

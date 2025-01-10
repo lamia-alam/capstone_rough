@@ -10,6 +10,7 @@ import { Landing } from "./pages/Landing";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
+import { Session } from "./pages/Session";
 import { PrivateRoutes } from "./components/PrivateRoutes";
 import { AuthContext } from "./context/AuthContext";
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/session" element={<Session />} />
         </Route>
       </Routes>
     </div>

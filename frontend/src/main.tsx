@@ -8,12 +8,14 @@ import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <FileProvider>
-          <App />
-        </FileProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <div data-theme="pastel">
+      <BrowserRouter>
+        <AuthProvider>
+          <FileProvider>
+            <App />
+          </FileProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </div>
   </StrictMode>
 );
