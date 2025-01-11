@@ -38,6 +38,15 @@ class FieldOfInterest(Base):
 
     user = relationship("Users", back_populates="field_of_interest")
 
+class Question(Base):
+    __tablename__ = "questions"
+
+    id = Column(Integer, primary_key=True, index=True)  # Unique identifier for each question
+    category = Column(String, nullable=False, index=True)  # Category name (must always be provided)
+    question_text = Column(String, nullable=False, unique=True)  # Question text (must be unique)
+
+    def __repr__(self):
+        return f"<Question(id={self.id}, category='{self.category}', question_text='{self.question_text}')>"
 
 
 

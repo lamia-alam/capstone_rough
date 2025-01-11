@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { api } from "../config/axios";
 
 const categories = [
   "Teamwork",
@@ -13,8 +14,25 @@ export const Session: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [numQuestions, setNumQuestions] = useState<number | null>(null);
   const [stage, setStage] = useState<number>(0);
-
+  const [currQuestion, setCurrQuestion] = useState<number>(0);
+  const [questions, setQuestions] = useState<
+    {
+      question_text: string;
+      category: string;
+    }[]
+  >([]);
   const [timer, setTimer] = useState<number | null>(120);
+
+  const getQuestions = async () => {
+    try {
+      const res = await api.get(`/questions/${selectedCategory}`);
+      console.log("🚀 ~ getQuestions ~ res:", res);
+      setQuestions(res.data.slice(0, numQuestions || res.data.length));
+    } catch (error) {
+      console.log("🚀 ~ getQuestions ~ error:", error);
+    }
+  };
+
   useEffect(() => {
     if (stage !== 2) {
       setTimer(null);
@@ -101,6 +119,7 @@ export const Session: React.FC = () => {
               className="btn btn-primary btn-wide"
               onClick={() => {
                 setStage(2);
+                getQuestions();
               }}
               disabled={numQuestions === null}
             >
@@ -114,7 +133,9 @@ export const Session: React.FC = () => {
         <>
           <h2 className="text-xl">Category: {selectedCategory}</h2>
           <p className="text-lg">
-            How many questions would you like to practice?
+            <span>Question {currQuestion + 1}:</span>{" "}
+            {questions.length ? questions[currQuestion].question_text : ""}
+            {/* How many questions would you like to practice? */}
           </p>
           <p>Prepare before recording your answer</p>
           <h2 className="text-3xl">
@@ -126,6 +147,18 @@ export const Session: React.FC = () => {
                   .padStart(2, "0")}`
               : "00:00"}
           </h2>
+          <button
+            className="btn btn-primary btn-wide"
+            disabled={currQuestion === questions.length - 1}
+            onClick={() => {
+              if (currQuestion < questions.length - 1) {
+                setCurrQuestion((prev) => prev + 1);
+                setTimer(120); // reset timer
+              }
+            }}
+          >
+            Next Question
+          </button>
         </>
       )}
     </div>
